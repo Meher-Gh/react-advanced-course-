@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import uniqid from "uniqid";
+
 // JS
 // const input = document.getElementById('myText');
 // const inputValue = input.value
@@ -6,7 +8,64 @@ import React, { useState } from 'react';
 // value, onChange
 
 const ControlledInputs = () => {
-  return <h1>controlled inputs</h1>;
+  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+  const [people, setPeople] = useState([]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (firstName && email) {
+      const person = { id: uniqid(), firstName, email };
+      setPeople((people) => {
+        return [...people, person];
+      });
+      setFirstName("");
+      setEmail("");
+    } else {
+      console.log("error");
+    }
+  };
+
+  return (
+    <>
+      <article>
+        <form className="form" onSubmit={handleSubmit}>
+          <div className="form-control">
+            <label htmlFor="firstName">Name : </label>
+            <input
+              type="text"
+              id="firstName"
+              name="'firstName"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+          </div>
+          <div className="form-control">
+            <label htmlFor="email">Email : </label>
+            <input
+              type="text"
+              id="email"
+              name="'email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <button type="submit">add person</button>
+        </form>
+
+        {people.map((person) => {
+          const { id, firstName, email } = person;
+          console.log(person);
+          return (
+            <div className="item" key={id}>
+              <h1>{firstName}</h1>
+              <p>{email}</p>
+            </div>
+          );
+        })}
+      </article>
+    </>
+  );
 };
 
 export default ControlledInputs;
